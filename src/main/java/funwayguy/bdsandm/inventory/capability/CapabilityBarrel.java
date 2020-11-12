@@ -2,9 +2,9 @@ package funwayguy.bdsandm.inventory.capability;
 
 import funwayguy.bdsandm.core.BDSM;
 import funwayguy.bdsandm.core.BdsmConfig;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -467,7 +467,7 @@ public class CapabilityBarrel implements ICrate, IBarrel
     }
     
     @Override
-    public boolean installUpgrade(@Nonnull EntityPlayer player, @Nonnull ItemStack stack)
+    public boolean installUpgrade(@Nonnull PlayerEntity player, @Nonnull ItemStack stack)
     {
         if(stack.isEmpty()) return false;
         
@@ -628,11 +628,11 @@ public class CapabilityBarrel implements ICrate, IBarrel
     }
     
     @Override
-    public NBTTagCompound serializeNBT()
+    public CompoundNBT serializeNBT()
     {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setTag("refStack", refStack.writeToNBT(new NBTTagCompound()));
-        nbt.setTag("refFluid", refFluid == null ? new NBTTagCompound() : refFluid.writeToNBT(new NBTTagCompound()));
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.setTag("refStack", refStack.writeToNBT(new CompoundNBT()));
+        nbt.setTag("refFluid", refFluid == null ? new CompoundNBT() : refFluid.writeToNBT(new CompoundNBT()));
         nbt.setInteger("count", count);
         nbt.setInteger("stackCap", stackCapacity);
         nbt.setInteger("maxCap", maxStackCapacity);
@@ -644,7 +644,7 @@ public class CapabilityBarrel implements ICrate, IBarrel
     }
     
     @Override
-    public void deserializeNBT(NBTTagCompound nbt)
+    public void deserializeNBT(CompoundNBT nbt)
     {
         refStack = new ItemStack(nbt.getCompoundTag("refStack"));
         refFluid = FluidStack.loadFluidStackFromNBT(nbt.getCompoundTag("refFluid"));

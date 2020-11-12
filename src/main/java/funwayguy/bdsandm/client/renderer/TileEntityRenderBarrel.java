@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.GuiUtils;
 
@@ -48,7 +48,7 @@ public class TileEntityRenderBarrel extends TileEntitySpecialRenderer<TileEntity
                 GlStateManager.pushMatrix();
                 
                 GlStateManager.translate(x + 0.5D, y + 0.5D, z + 0.5D);
-                rotateSide(EnumFacing.byIndex(te.getBlockMetadata() & 7));
+                rotateSide(Direction.byIndex(te.getBlockMetadata() & 7));
                 GlStateManager.translate(0D, 0.3D, 0.5D);
                 GlStateManager.scale(0.01F, 0.01F, 1F);
                 GlStateManager.rotate(180F, 1F, 0F, 0F);
@@ -82,7 +82,7 @@ public class TileEntityRenderBarrel extends TileEntitySpecialRenderer<TileEntity
             GlStateManager.pushMatrix();
             
             GlStateManager.translate(x + 0.5D, y + 0.5D, z + 0.5D);
-            rotateSide(EnumFacing.byIndex(te.getBlockMetadata() & 7));
+            rotateSide(Direction.byIndex(te.getBlockMetadata() & 7));
             GlStateManager.translate(0D, 0.3D, 0.5D);
             GlStateManager.scale(0.01F, 0.01F, 1F);
             GlStateManager.rotate(180F, 1F, 0F, 0F);
@@ -110,7 +110,7 @@ public class TileEntityRenderBarrel extends TileEntitySpecialRenderer<TileEntity
             
             GlStateManager.pushMatrix();
             GlStateManager.translate(x + 0.5D, y + 0.5D, z + 0.5D);
-            rotateSide(EnumFacing.byIndex(te.getBlockMetadata() & 7));
+            rotateSide(Direction.byIndex(te.getBlockMetadata() & 7));
             GlStateManager.translate(0D, - 0.1D, 0.5D);
             GlStateManager.scale(0.4F, 0.4F, 0.01F);
             
@@ -124,7 +124,7 @@ public class TileEntityRenderBarrel extends TileEntitySpecialRenderer<TileEntity
             GlStateManager.pushMatrix();
             
             GlStateManager.translate(x + 0.5D, y + 0.5D, z + 0.5D);
-            rotateSide(EnumFacing.byIndex(te.getBlockMetadata() & 7));
+            rotateSide(Direction.byIndex(te.getBlockMetadata() & 7));
             GlStateManager.translate(0D, 0.3D, 0.5D);
             GlStateManager.scale(0.01F, 0.01F, 1F);
             GlStateManager.rotate(180F, 1F, 0F, 0F);
@@ -154,7 +154,7 @@ public class TileEntityRenderBarrel extends TileEntitySpecialRenderer<TileEntity
             {
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(x + 0.5D, y + 0.5D, z + 0.5D);
-                rotateSide(EnumFacing.byIndex(te.getBlockMetadata() & 7));
+                rotateSide(Direction.byIndex(te.getBlockMetadata() & 7));
                 GlStateManager.scale(0.025F, 0.025F, 1F);
                 GlStateManager.rotate(180F, 1F, 0F, 0F);
                 GlStateManager.translate(-8D, -5D, -0.5D);
@@ -197,7 +197,7 @@ public class TileEntityRenderBarrel extends TileEntitySpecialRenderer<TileEntity
         GlStateManager.pushMatrix();
         
         GlStateManager.translate(x + 0.5D, y + 0.5D, z + 0.5D);
-        rotateSide(EnumFacing.byIndex(te.getBlockMetadata() & 7));
+        rotateSide(Direction.byIndex(te.getBlockMetadata() & 7));
         GlStateManager.translate(0D, 0D, 0.5D);
         GlStateManager.scale(0.01F, 0.01F, 1F);
         GlStateManager.rotate(180F, 1F, 0F, 0F);
@@ -217,7 +217,7 @@ public class TileEntityRenderBarrel extends TileEntitySpecialRenderer<TileEntity
         GlStateManager.popMatrix();
     }
     
-    private void rotateSide(EnumFacing facing)
+    private void rotateSide(Direction facing)
     {
         switch(facing)
         {

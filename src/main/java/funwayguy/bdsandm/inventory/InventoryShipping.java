@@ -2,7 +2,7 @@ package funwayguy.bdsandm.inventory;
 
 import funwayguy.bdsandm.blocks.tiles.TileEntityShipping;
 import funwayguy.bdsandm.core.BDSM;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -21,7 +21,7 @@ public class InventoryShipping extends InventoryBasic
         this.tile = tile;
     }
     
-    public boolean isUsableByPlayer(EntityPlayer player)
+    public boolean isUsableByPlayer(PlayerEntity player)
     {
         return player.getDistanceSq(tile.getPos()) < 256;
     }

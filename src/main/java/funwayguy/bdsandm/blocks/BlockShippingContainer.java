@@ -10,16 +10,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -45,7 +45,7 @@ public class BlockShippingContainer extends Block implements ITileEntityProvider
     }
     
     @Override
-    public int getColorCount(IBlockAccess blockAccess, IBlockState state, BlockPos pos)
+    public int getColorCount(IBlockAccess blockAccess, BlockState state, BlockPos pos)
     {
         TileEntity tile = blockAccess.getTileEntity(pos);
         
@@ -59,7 +59,7 @@ public class BlockShippingContainer extends Block implements ITileEntityProvider
     }
     
     @Override
-    public int[] getColors(IBlockAccess blockAccess, IBlockState state, BlockPos pos)
+    public int[] getColors(IBlockAccess blockAccess, BlockState state, BlockPos pos)
     {
         TileEntity tile = blockAccess.getTileEntity(pos);
         
@@ -73,7 +73,7 @@ public class BlockShippingContainer extends Block implements ITileEntityProvider
     }
     
     @Override
-    public void setColors(IBlockAccess blockAccess, IBlockState state, BlockPos pos, int[] colors)
+    public void setColors(IBlockAccess blockAccess, BlockState state, BlockPos pos, int[] colors)
     {
         TileEntity tile = blockAccess.getTileEntity(pos);
         
@@ -89,7 +89,7 @@ public class BlockShippingContainer extends Block implements ITileEntityProvider
     }
     
 	@Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing heldItem, float side, float hitX, float hitY)
+    public boolean onBlockActivated(World world, BlockPos pos, BlockState state, PlayerEntity player, Hand hand, Direction heldItem, float side, float hitX, float hitY)
     {
     	if(!world.isRemote)
     	{
@@ -100,7 +100,7 @@ public class BlockShippingContainer extends Block implements ITileEntityProvider
     }
     
     @Override
-    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state)
+    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState state)
     {
         if(multiBreak)
         {
@@ -175,7 +175,7 @@ public class BlockShippingContainer extends Block implements ITileEntityProvider
     }
     
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, BlockState state, EntityLivingBase placer, ItemStack stack)
     {
         boolean turnIt = placer.getHorizontalFacing().getHorizontalIndex() % 2 == 0; // This really only matters index 0 and 4 but we set them all for consistency
         int myIdx = new int[]{4, 5, 1, 0}[placer.getHorizontalFacing().getHorizontalIndex()];
@@ -218,7 +218,7 @@ public class BlockShippingContainer extends Block implements ITileEntityProvider
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
-    public EnumBlockRenderType getRenderType(IBlockState state)
+    public EnumBlockRenderType getRenderType(BlockState state)
     {
         if(state.getValue(TURNED))
         {
@@ -239,27 +239,27 @@ public class BlockShippingContainer extends Block implements ITileEntityProvider
     
     @Override
     @SuppressWarnings("deprecation")
-    public boolean isFullCube(IBlockState state)
+    public boolean isFullCube(BlockState state)
     {
         return false;
     }
     
     @Override
     @SuppressWarnings("deprecation")
-    public boolean isOpaqueCube(IBlockState state)
+    public boolean isOpaqueCube(BlockState state)
     {
         return false;
     }
     
     @Override
-    public int getMetaFromState(IBlockState state)
+    public int getMetaFromState(BlockState state)
     {
         return state.getValue(PROXY_IDX) | (state.getValue(TURNED) ? 8 : 0);
     }
     
     @Nonnull
     @Override
-    public IBlockState getStateForPlacement(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, @Nonnull EntityLivingBase placer, EnumHand hand)
+    public BlockState getStateForPlacement(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull Direction facing, float hitX, float hitY, float hitZ, int meta, @Nonnull EntityLivingBase placer, Hand hand)
     {
         return this.getDefaultState().withProperty(PROXY_IDX, new int[]{4, 5, 1, 0}[placer.getHorizontalFacing().getHorizontalIndex()]).withProperty(TURNED, placer.getHorizontalFacing().getHorizontalIndex() % 2 == 0);
     }
@@ -267,7 +267,7 @@ public class BlockShippingContainer extends Block implements ITileEntityProvider
     @Nonnull
     @Override
     @SuppressWarnings("deprecation")
-    public IBlockState getStateFromMeta(int meta)
+    public BlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState().withProperty(PROXY_IDX, meta & 7).withProperty(TURNED, (meta & 8) == 8);
     }
@@ -287,7 +287,7 @@ public class BlockShippingContainer extends Block implements ITileEntityProvider
     }
     
     @Override
-    public boolean canCreatureSpawn(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, net.minecraft.entity.EntityLiving.SpawnPlacementType type)
+    public boolean canCreatureSpawn(@Nonnull BlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, net.minecraft.entity.EntityLiving.SpawnPlacementType type)
     {
         return true;
     }

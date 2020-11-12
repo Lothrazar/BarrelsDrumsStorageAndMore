@@ -5,7 +5,7 @@ import funwayguy.bdsandm.core.BDSM;
 import funwayguy.bdsandm.inventory.capability.BdsmCapabilies;
 import funwayguy.bdsandm.inventory.capability.ICrate;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -20,7 +20,7 @@ public class BlockMetalCrate extends BlockCrateBase implements IBdsmColorBlock
     }
     
     @Override
-    public int getColorCount(IBlockAccess blockAccess, IBlockState state, BlockPos pos)
+    public int getColorCount(IBlockAccess blockAccess, BlockState state, BlockPos pos)
     {
         TileEntity tile = blockAccess.getTileEntity(pos);
         
@@ -33,7 +33,7 @@ public class BlockMetalCrate extends BlockCrateBase implements IBdsmColorBlock
     }
     
     @Override
-    public int[] getColors(IBlockAccess blockAccess, IBlockState state, BlockPos pos)
+    public int[] getColors(IBlockAccess blockAccess, BlockState state, BlockPos pos)
     {
         TileEntity tile = blockAccess.getTileEntity(pos);
         
@@ -46,7 +46,7 @@ public class BlockMetalCrate extends BlockCrateBase implements IBdsmColorBlock
     }
     
     @Override
-    public void setColors(IBlockAccess blockAccess, IBlockState state, BlockPos pos, int[] color)
+    public void setColors(IBlockAccess blockAccess, BlockState state, BlockPos pos, int[] color)
     {
         TileEntity tile = blockAccess.getTileEntity(pos);
         

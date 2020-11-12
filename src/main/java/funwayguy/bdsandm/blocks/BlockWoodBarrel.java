@@ -6,10 +6,10 @@ import funwayguy.bdsandm.inventory.capability.BdsmCapabilies;
 import funwayguy.bdsandm.inventory.capability.IBarrel;
 import net.minecraft.block.BlockTNT;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -29,7 +29,7 @@ public class BlockWoodBarrel extends BlockBarrelBase
     }
     
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand)
+    public void updateTick(World worldIn, BlockPos pos, BlockState state, Random rand)
     {
         TileEntity tile = worldIn.getTileEntity(pos);
         
@@ -40,25 +40,25 @@ public class BlockWoodBarrel extends BlockBarrelBase
             if(barrelCap.getRefFluid().getFluid().getTemperature() > 500) // Roughly based on the wood ignition temperature in Kelvin
             {
                 int j = -50;
-                this.tryCatchFire(worldIn, pos.east(), 300 + j, rand, EnumFacing.WEST);
-                this.tryCatchFire(worldIn, pos.west(), 300 + j, rand, EnumFacing.EAST);
-                this.tryCatchFire(worldIn, pos.down(), 250 + j, rand, EnumFacing.UP);
-                this.tryCatchFire(worldIn, pos.up(), 250 + j, rand, EnumFacing.DOWN);
-                this.tryCatchFire(worldIn, pos.north(), 300 + j, rand, EnumFacing.SOUTH);
-                this.tryCatchFire(worldIn, pos.south(), 300 + j, rand, EnumFacing.NORTH);
+                this.tryCatchFire(worldIn, pos.east(), 300 + j, rand, Direction.WEST);
+                this.tryCatchFire(worldIn, pos.west(), 300 + j, rand, Direction.EAST);
+                this.tryCatchFire(worldIn, pos.down(), 250 + j, rand, Direction.UP);
+                this.tryCatchFire(worldIn, pos.up(), 250 + j, rand, Direction.DOWN);
+                this.tryCatchFire(worldIn, pos.north(), 300 + j, rand, Direction.SOUTH);
+                this.tryCatchFire(worldIn, pos.south(), 300 + j, rand, Direction.NORTH);
                 
                 worldIn.scheduleUpdate(pos, this, 20 + rand.nextInt(10));
             }
         }
     }
 
-    private void tryCatchFire(World worldIn, BlockPos pos, int chance, Random random, EnumFacing face)
+    private void tryCatchFire(World worldIn, BlockPos pos, int chance, Random random, Direction face)
     {
         int i = worldIn.getBlockState(pos).getBlock().getFlammability(worldIn, pos, face);
 
         if (random.nextInt(chance) < i)
         {
-            IBlockState iblockstate = worldIn.getBlockState(pos);
+            BlockState BlockState = worldIn.getBlockState(pos);
 
             if (random.nextInt(10) < 5 && !worldIn.isRainingAt(pos))
             {
@@ -76,9 +76,9 @@ public class BlockWoodBarrel extends BlockBarrelBase
                 worldIn.setBlockToAir(pos);
             }
 
-            if (iblockstate.getBlock() == Blocks.TNT)
+            if (BlockState.getBlock() == Blocks.TNT)
             {
-                Blocks.TNT.onPlayerDestroy(worldIn, pos, iblockstate.withProperty(BlockTNT.EXPLODE, true));
+                Blocks.TNT.onPlayerDestroy(worldIn, pos, BlockState.withProperty(BlockTNT.EXPLODE, true));
             }
         }
     }

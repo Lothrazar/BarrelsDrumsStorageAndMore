@@ -6,12 +6,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -34,7 +34,7 @@ public class TileEntityShipping extends TileEntity implements IInventoryChangedL
     private final InventoryShipping invo;
     private final ShippingProxyWrapper proxyWrapper;
     
-    private static final EnumFacing[][] openSides = new EnumFacing[8][3];
+    private static final Direction[][] openSides = new Direction[8][3];
     
     private int[] colors = new int[]{0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF};
     
@@ -74,16 +74,16 @@ public class TileEntityShipping extends TileEntity implements IInventoryChangedL
     
     @Nonnull
     @Override
-    public NBTTagCompound getUpdateTag()
+    public CompoundNBT getUpdateTag()
     {
-        return this.writeToNBT(new NBTTagCompound());
+        return this.writeToNBT(new CompoundNBT());
     }
     
     @Nonnull
     @Override
     public SPacketUpdateTileEntity getUpdatePacket()
     {
-        return new SPacketUpdateTileEntity(pos, 0, this.writeToNBT(new NBTTagCompound()));
+        return new SPacketUpdateTileEntity(pos, 0, this.writeToNBT(new CompoundNBT()));
     }
     
     @Override
@@ -106,7 +106,7 @@ public class TileEntityShipping extends TileEntity implements IInventoryChangedL
         if(maxOffer <= 0) return;
         int sent = 0;
         
-        for(EnumFacing side : openSides[proxyIdx])
+        for(Direction side : openSides[proxyIdx])
         {
             BlockPos offPos = pos.offset(side);
             TileEntity tile = world.getTileEntity(offPos);
@@ -130,7 +130,7 @@ public class TileEntityShipping extends TileEntity implements IInventoryChangedL
     }
     
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing)
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing)
     {
         if(getProxyTile() == null) return false;
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || capability == CapabilityEnergy.ENERGY;
@@ -138,7 +138,7 @@ public class TileEntityShipping extends TileEntity implements IInventoryChangedL
     
     @Nullable
     @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing)
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing)
     {
         TileEntityShipping proxyTile = getProxyTile();
         if(proxyTile == null) return null;
@@ -166,7 +166,7 @@ public class TileEntityShipping extends TileEntity implements IInventoryChangedL
     
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound tag)
+    public CompoundNBT writeToNBT(CompoundNBT tag)
     {
         tag.setInteger("proxyIdx", proxyIdx);
         tag.setIntArray("objColors", colors);
@@ -182,9 +182,9 @@ public class TileEntityShipping extends TileEntity implements IInventoryChangedL
                 continue;
             }
             
-            NBTTagCompound itemTag = new NBTTagCompound();
+            CompoundNBT itemTag = new CompoundNBT();
             itemTag.setByte("slot", (byte)i);
-            itemTag.setTag("item", stack.writeToNBT(new NBTTagCompound()));
+            itemTag.setTag("item", stack.writeToNBT(new CompoundNBT()));
             list.appendTag(itemTag);
         }
         
@@ -194,7 +194,7 @@ public class TileEntityShipping extends TileEntity implements IInventoryChangedL
     }
     
     @Override
-    public void readFromNBT(NBTTagCompound tag)
+    public void readFromNBT(CompoundNBT tag)
     {
         super.readFromNBT(tag);
         
@@ -204,12 +204,12 @@ public class TileEntityShipping extends TileEntity implements IInventoryChangedL
         invo.clear();
         for(NBTBase nbt : tag.getTagList("invo", 10))
         {
-            if(!(nbt instanceof NBTTagCompound))
+            if(!(nbt instanceof CompoundNBT))
             {
                 continue;
             }
         
-            NBTTagCompound itemTag = (NBTTagCompound)nbt;
+            CompoundNBT itemTag = (CompoundNBT)nbt;
         
             invo.setSlotWithoutNotice(itemTag.getByte("slot"), new ItemStack(itemTag.getCompoundTag("item")));
         }
@@ -270,26 +270,26 @@ public class TileEntityShipping extends TileEntity implements IInventoryChangedL
         {
             if(i == 0 || i == 1 || i == 4 || i == 5)
             {
-                openSides[i][0] = EnumFacing.DOWN;
+                openSides[i][0] = Direction.DOWN;
             } else
             {
-                openSides[i][0] = EnumFacing.UP;
+                openSides[i][0] = Direction.UP;
             }
             
             if(i == 0 || i == 2 || i == 4 || i == 6)
             {
-                openSides[i][1] = EnumFacing.NORTH;
+                openSides[i][1] = Direction.NORTH;
             } else
             {
-                openSides[i][1] = EnumFacing.SOUTH;
+                openSides[i][1] = Direction.SOUTH;
             }
             
             if(i < 4)
             {
-                openSides[i][2] = EnumFacing.WEST;
+                openSides[i][2] = Direction.WEST;
             } else
             {
-                openSides[i][2] = EnumFacing.EAST;
+                openSides[i][2] = Direction.EAST;
             }
         }
     }

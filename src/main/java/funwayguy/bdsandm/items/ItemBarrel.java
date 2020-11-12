@@ -6,14 +6,14 @@ import funwayguy.bdsandm.inventory.capability.BdsmCapabilies;
 import funwayguy.bdsandm.inventory.capability.CapabilityBarrel;
 import funwayguy.bdsandm.inventory.capability.CapabilityProviderBarrel;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -72,7 +72,7 @@ public class ItemBarrel extends ItemBlock implements IBdsmColorItem
     }
     
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt)
+    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundNBT nbt)
     {
         CapabilityProviderBarrel capBarrel = new CapabilityProviderBarrel(stackCap, maxCap).setParentStack(stack);
         if(nbt != null) capBarrel.deserializeNBT(nbt);
@@ -103,7 +103,7 @@ public class ItemBarrel extends ItemBlock implements IBdsmColorItem
     }
     
     @Override
-    public NBTTagCompound getNBTShareTag(ItemStack stack)
+    public CompoundNBT getNBTShareTag(ItemStack stack)
     {
         CapabilityBarrel barrel = (CapabilityBarrel)stack.getCapability(BdsmCapabilies.BARREL_CAP, null);
         assert barrel != null;
@@ -113,7 +113,7 @@ public class ItemBarrel extends ItemBlock implements IBdsmColorItem
     }
     
     @Override
-    public void readNBTShareTag(ItemStack stack, @Nullable NBTTagCompound nbt)
+    public void readNBTShareTag(ItemStack stack, @Nullable CompoundNBT nbt)
     {
         super.readNBTShareTag(stack, nbt);
         
@@ -124,7 +124,7 @@ public class ItemBarrel extends ItemBlock implements IBdsmColorItem
     }
     
     @Override
-    public boolean placeBlockAt(@Nonnull ItemStack stack, @Nonnull EntityPlayer player, World world, @Nonnull BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull IBlockState newState)
+    public boolean placeBlockAt(@Nonnull ItemStack stack, @Nonnull PlayerEntity player, World world, @Nonnull BlockPos pos, Direction side, float hitX, float hitY, float hitZ, @Nonnull BlockState newState)
     {
         if(!super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState)) return false;
         

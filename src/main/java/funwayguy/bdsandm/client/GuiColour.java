@@ -3,14 +3,14 @@ package funwayguy.bdsandm.client;
 import funwayguy.bdsandm.client.color.IBdsmColorBlock;
 import funwayguy.bdsandm.core.BDSM;
 import funwayguy.bdsandm.network.PacketBdsm;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -41,7 +41,7 @@ public class GuiColour extends GuiScreen
         this.world = world;
         this.pos = pos;
     
-        IBlockState state = world.getBlockState(pos);
+        BlockState state = world.getBlockState(pos);
         this.colors = Arrays.copyOf(block.getColors(world, state, pos), block.getColorCount(world, state, pos));
         findInHistory();
     }
@@ -215,7 +215,7 @@ public class GuiColour extends GuiScreen
             HISTORY[0] = tmp;
             
             // Send changes to server
-            NBTTagCompound tags = new NBTTagCompound();
+            CompoundNBT tags = new CompoundNBT();
             tags.setInteger("msgType", 1);
             tags.setInteger("dim", world.provider.getDimension());
             tags.setLong("pos", pos.toLong());

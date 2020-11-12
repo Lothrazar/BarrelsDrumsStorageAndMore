@@ -1,8 +1,8 @@
 package funwayguy.bdsandm.inventory.capability;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
@@ -12,7 +12,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class CapabilityProviderBarrel implements ICapabilityProvider, ICapabilitySerializable<NBTTagCompound>
+public class CapabilityProviderBarrel implements ICapabilityProvider, ICapabilitySerializable<CompoundNBT>
 {
     private final CapabilityBarrel barrel;
     private ItemStack stack;
@@ -29,10 +29,10 @@ public class CapabilityProviderBarrel implements ICapabilityProvider, ICapabilit
         
         final ItemStack finStack = stack;
         barrel.setCallback(() -> {
-            NBTTagCompound sTag = stack.getTagCompound();
+            CompoundNBT sTag = stack.getTagCompound();
             if(sTag == null)
             {
-                sTag = new NBTTagCompound();
+                sTag = new CompoundNBT();
                 finStack.setTagCompound(sTag);
             }
             
@@ -43,14 +43,14 @@ public class CapabilityProviderBarrel implements ICapabilityProvider, ICapabilit
     }
     
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing)
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing)
     {
         return BdsmCapabilies.CRATE_CAP == capability || capability == BdsmCapabilies.BARREL_CAP || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
     }
     
     @Nullable
     @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing)
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing)
     {
         if(capability == BdsmCapabilies.CRATE_CAP)
         {
@@ -73,15 +73,15 @@ public class CapabilityProviderBarrel implements ICapabilityProvider, ICapabilit
     }
     
     @Override
-    public NBTTagCompound serializeNBT()
+    public CompoundNBT serializeNBT()
     {
-        NBTTagCompound tag = barrel.serializeNBT();
+        CompoundNBT tag = barrel.serializeNBT();
         if(stack != null) stack.setTagInfo("barrelCap", tag.copy()); // Purely for display purposes client side. Not to be trusted as accurate
         return tag;
     }
     
     @Override
-    public void deserializeNBT(NBTTagCompound nbt)
+    public void deserializeNBT(CompoundNBT nbt)
     {
         barrel.deserializeNBT(nbt);
         if(stack != null) stack.setTagInfo("barrelCap", nbt.copy()); // Purely for display purposes client side. Not to be trusted as accurate

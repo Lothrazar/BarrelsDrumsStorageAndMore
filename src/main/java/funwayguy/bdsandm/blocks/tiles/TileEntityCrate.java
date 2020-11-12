@@ -3,11 +3,11 @@ package funwayguy.bdsandm.blocks.tiles;
 import funwayguy.bdsandm.inventory.capability.BdsmCapabilies;
 import funwayguy.bdsandm.inventory.capability.CapabilityCrate;
 import funwayguy.bdsandm.inventory.capability.ICrateCallback;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -51,7 +51,7 @@ public class TileEntityCrate extends TileEntity implements ICrateCallback
     }
     
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing)
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable Direction facing)
     {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == BdsmCapabilies.CRATE_CAP)
         {
@@ -63,7 +63,7 @@ public class TileEntityCrate extends TileEntity implements ICrateCallback
     
     @Nullable
     @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing)
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable Direction facing)
     {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
         {
@@ -86,20 +86,20 @@ public class TileEntityCrate extends TileEntity implements ICrateCallback
     
     @Nonnull
     @Override
-    public NBTTagCompound getUpdateTag()
+    public CompoundNBT getUpdateTag()
     {
-        return this.writeToNBT(new NBTTagCompound());
+        return this.writeToNBT(new CompoundNBT());
     }
     
     @Nonnull
     @Override
     public SPacketUpdateTileEntity getUpdatePacket()
     {
-        return new SPacketUpdateTileEntity(pos, 0, this.writeToNBT(new NBTTagCompound()));
+        return new SPacketUpdateTileEntity(pos, 0, this.writeToNBT(new CompoundNBT()));
     }
     
     @Override
-    public void readFromNBT(NBTTagCompound nbt)
+    public void readFromNBT(CompoundNBT nbt)
     {
         super.readFromNBT(nbt);
         
@@ -115,7 +115,7 @@ public class TileEntityCrate extends TileEntity implements ICrateCallback
     
     @Nonnull
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
+    public CompoundNBT writeToNBT(CompoundNBT nbt)
     {
         nbt.setTag("crateCap", crateCap.serializeNBT());
         

@@ -4,13 +4,13 @@ import funwayguy.bdsandm.blocks.IStorageBlock;
 import funwayguy.bdsandm.client.color.IBdsmColorBlock;
 import funwayguy.bdsandm.core.BdsmConfig;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -25,14 +25,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketBdsm implements IMessage
 {
-	private NBTTagCompound tags = new NBTTagCompound();
+	private CompoundNBT tags = new CompoundNBT();
 	
 	@SuppressWarnings("unused")
 	public PacketBdsm()
 	{
 	}
 	
-	public PacketBdsm(NBTTagCompound tags)
+	public PacketBdsm(CompoundNBT tags)
 	{
 		this.tags = tags;
 	}
@@ -62,18 +62,18 @@ public class PacketBdsm implements IMessage
                 BlockPos pos = BlockPos.fromLong(message.tags.getLong("pos"));
                 int[] colors = message.tags.getIntArray("color");
                 
-                IBlockState state = world.getBlockState(pos);
+                BlockState state = world.getBlockState(pos);
                 if(state.getBlock() instanceof IBdsmColorBlock)
                 {
                     ((IBdsmColorBlock)state.getBlock()).setColors(world, state, pos, colors);
                 }
             } else if(msgType == 2) // Control Response
             {
-                EntityPlayerMP player = ctx.getServerHandler().player;
+                ServerPlayerEntity player = ctx.getServerHandler().player;
                 BlockPos pos = BlockPos.fromLong(message.tags.getLong("pos"));
-                IBlockState state = player.world.getBlockState(pos);
-                EnumFacing face = EnumFacing.byIndex(message.tags.getInteger("face"));
-                EnumHand hand = message.tags.getBoolean("offHand") ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
+                BlockState state = player.world.getBlockState(pos);
+                Direction face = Direction.byIndex(message.tags.getInteger("face"));
+                Hand hand = message.tags.getBoolean("offHand") ? Hand.OFF_HAND : Hand.MAIN_HAND;
                 boolean isHit = message.tags.getBoolean("isHit");
                 boolean altMode = message.tags.getBoolean("altMode");
                 int delay = message.tags.getInteger("delay");
@@ -96,15 +96,15 @@ public class PacketBdsm implements IMessage
             if(msgType == 2) // Control Query
             {
                 BlockPos pos = BlockPos.fromLong(message.tags.getLong("pos"));
-                EntityPlayer player = Minecraft.getMinecraft().player;
-                IBlockState state = player.world.getBlockState(pos);
+                PlayerEntity player = Minecraft.getMinecraft().player;
+                BlockState state = player.world.getBlockState(pos);
                 Vec3d start = player.getPositionEyes(1F);
                 Vec3d end = player.getLook(1F);
                 end = start.add(end.x * 6D, end.y * 6D, end.z * 6D);
                 RayTraceResult rtr = state.getSelectedBoundingBox(player.world, pos).calculateIntercept(start, end);
-                EnumFacing face = rtr == null ? EnumFacing.DOWN : rtr.sideHit;
+                Direction face = rtr == null ? Direction.DOWN : rtr.sideHit;
                 
-                NBTTagCompound tagRes = new NBTTagCompound();
+                CompoundNBT tagRes = new CompoundNBT();
                 tagRes.setInteger("msgType", 2);
                 tagRes.setLong("pos", message.tags.getLong("pos"));
                 tagRes.setInteger("face", face.getIndex());

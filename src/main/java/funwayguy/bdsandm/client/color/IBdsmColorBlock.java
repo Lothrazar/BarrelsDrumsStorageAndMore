@@ -1,12 +1,15 @@
 package funwayguy.bdsandm.client.color;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.world.World;
 
-public interface IBdsmColorBlock
-{
-    int getColorCount(IBlockAccess blockAccess, IBlockState state, BlockPos pos);
-    int[] getColors(IBlockAccess blockAccess, IBlockState state, BlockPos pos);
-    void setColors(IBlockAccess blockAccess, IBlockState state, BlockPos pos, int[] colors);
+public interface IBdsmColorBlock {
+
+  int getColorCount(World blockAccess, BlockState state, BlockPos pos);
+
+  int[] getColors(IBlockDisplayReader blockAccess, BlockState state, BlockPos pos);
+
+  void setColors(World blockAccess, BlockState state, BlockPos pos, int[] colors);
 }
